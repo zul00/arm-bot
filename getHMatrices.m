@@ -2,7 +2,7 @@ clear all;
 
 pi = pi();
 
-q = [pi/2; pi/2; 0];
+q = [0; pi/2; 0];
 
 L1 = 3;
 L2 = 2;
@@ -25,4 +25,4 @@ T320 = [1; 0; 0;    0; L1+L2; 0];
 [stat tT320] = tildeTwist(T320);
 
 % Brocket Eq
-Heeq = expm(tT1100*q(1)) * expm(tT210*q(2))*expm(tT320*q(3))*Hee;
+Heeq = expm(tT100*q(1)) * expm(tT210*q(2)) * expm(tT320*q(3)) * Hee0;
