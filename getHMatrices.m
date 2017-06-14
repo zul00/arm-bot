@@ -1,21 +1,21 @@
 function [H10 H20 H30 Hee0] = getHMatrices(q, L)
 
 % Homogenous Transformation Matrix
-% Joint1
+% Joint 1
 P = [0 0 0]';
 H10_0 = [
     eye(3)      P;
     zeros(1,3)  1
 ];
 
-% Joint2
+% Joint 2
 P = [0 0 L(1)]';
 H20_0 = [
     eye(3)      P;
     zeros(1,3)  1
 ];
 
-% Joint3
+% Joint 3
 P = [0 0 L(1)+L(2)]';
 H30_0 = [
     eye(3)      P;
