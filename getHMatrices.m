@@ -42,9 +42,9 @@ T10_0 = [0; 0; 1;    0; 0; 0];
 T21_0 = [1; 0; 0;    0; L1; 0];
 T32_0 = [1; 0; 0;    0; L1+L2; 0];
 
-[stat tT10_0] = tildeTwist(T10_0);
-[stat tT21_0] = tildeTwist(T21_0);
-[stat tT32_0] = tildeTwist(T32_0);
+tT10_0 = tildeTwist(T10_0);
+tT21_0 = tildeTwist(T21_0);
+tT32_0 = tildeTwist(T32_0);
 
 % Brocket Eq
 H10_q  = expm(tT10_0*q(1)) * H10_0;

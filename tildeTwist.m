@@ -1,4 +1,4 @@
-function [stat, tT] = tildeTwist(T)
+function tT = tildeTwist(T)
 
 % Obtain omega and v
 omega = T(1:3);
@@ -17,5 +17,4 @@ omega_t     v;
 zeros(1,3)  0
 ];
 
-stat = 0;
 end
