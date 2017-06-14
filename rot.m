@@ -1,19 +1,25 @@
-joint = 'x'
+function R = rot(axis, ang)
 
-switch joint
+switch axis
     case 'x'
         R =  [
-        1 0 0;
-        1 2 3;
-        3 4 5
+        1   0          0;
+        0   cos(ang)   -sin(ang);
+        0   sin(ang)   cos(ang)
         ];
     case 'y'
         R =  [
-        2 0 0;
-        2 2 3;
-        3 4 5
+        cos(ang)   0   sin(ang);
+        0          1   0;
+        -sin(ang)  0   cos(ang)
+        ];
+    case 'z'
+        R =  [
+        cos(ang)   -sin(ang)   0;
+        sin(ang)   cos(ang)    0;
+        0          0           1
         ];
     otherwise
-        fprintf('error')
+        error('Unknown axis')
 end
 
