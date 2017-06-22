@@ -1,52 +1,28 @@
 clear all
 
-%q    X     ;Y      ;Z
-q  = [0     ;pi/2      ;0];
-qd = [1     ;0      ;0];
+q  = [pi/2    ;0   ;0];
+qd = [0    ;0   ;1];
 
-L = [3  2  1]';
+L = [6  5  4]';
 
 %% Unit twist
-% Joint 1
-T1_00 = [0  0  1  0  0  0]';
+% Body 1
+w1 = [0  0  1]'; 
+r1 = [0  0  0]';
+T1 = [w1; cross(r1, w1)];
 
-% Joint 2
-T2_11 = [1  0  0  0  0  0]';
-%> Change coordinates to 0
-P10    = [0  0  L(1)];
-adjH10 = adj('z', q(1), P10);
-T2_10  = adjH10 * T2_11;
+% Body 2
+w2 = [cos(q(1))  -sin(q(1))  0]';
+r2 = [0  0  L(1)]';1
+T2 = [w2; cross(r2, w2)];
 
-% Joint 3
-T3_22 = [1  0  0  0  0  0]';
-%> Change coordinates to 0
-P21    = [0  0  L(2)];
-adjH21 = adj('x', q(2), P21);
-adjH20 = adjH10 * adjH21;
-T3_20 = adjH20 * T3_22;
+% Body 3
+w3 = w2;
+r3 = [L(2)*sin(q(1))*sin(q(2))  -L(2)*cos(q(1))*sin(q(2))  L(1)+L(2)*cos(q(2))]';
+T3 = [w3; cross(r3, w3)];
 
-%% Generate Jacobian
-J = [T1_00 T2_10 T3_20];
+%% Jacobian
+J = [T1 T2 T3];
 
+%% Test Jacobian
 Tq = J * qd;
-
-
-%% Tes
-P = [
-    0 -5 0;
-    5 0 0;
-    0 0 0];
-A = [
-    eye(3) zeros(3,3)
-    P eye(3)];
-
-
-P = [
-    0 -6 0;
-    6 0 0;
-    0 0 0];
-B = [
-    eye(3) zeros(3,3)
-    P eye(3)];
-
-C = A * B;
