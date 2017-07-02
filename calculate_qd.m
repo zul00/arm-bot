@@ -1,12 +1,7 @@
-clear all;
-
-% Robot parameter
-q  = [0  pi/2  0]';
-L  = [3  2  1];
+function qd = calculate_qd(q, setpoint, L)
 
 % Control parameter
 Kv = 1;
-p_sp = [0 0 6]';
 
 %% Get Brocket and Jacobian
 % Brocket
@@ -15,11 +10,11 @@ p_sp = [0 0 6]';
 % Jacobian
 J = getJacobian(q, L);
 
-%% Control
+%% Inverse Kinematics
 % Current position
 p_0 = He(1:3, 4);
 % Get target velocity
-pd = Kv * (p_sp - p_0);
+pd = Kv * (setpoint - p_0);
 % Move frame of Jacobian
 AdH04 = adj('z', 0, p_0);
 J4 = inv(AdH04) * J;
@@ -29,3 +24,5 @@ Jv = J4(4:6, :);
 Jvp = Jv' * inv(Jv * Jv');
 % Calculate qd from using Jacobian
 qd = Jvp * pd;
+
+end
