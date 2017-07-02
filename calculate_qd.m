@@ -1,11 +1,12 @@
 clear all;
 
 % Robot parameter
-q  = [pi/2 pi/2 0]';
+q  = [0  pi/2  0]';
 L  = [3  2  1];
 
-% Target
-p_sp = [0 0 0]';
+% Control parameter
+Kv = 1;
+p_sp = [0 0 6]';
 
 %% Get Brocket and Jacobian
 % Brocket
@@ -16,6 +17,15 @@ J = getJacobian(q, L);
 
 %% Control
 % Current position
-p_e = He(1:3, 4);
+p_0 = He(1:3, 4);
 % Get target velocity
-%pd_e = Kv * (p_sp - 
+pd = Kv * (p_sp - p_0);
+% Move frame of Jacobian
+AdH04 = adj('z', 0, p_0);
+J4 = inv(AdH04) * J;
+% Velocity Jacobian
+Jv = J4(4:6, :);
+% Pseudo Inverse Jacobian Velocity
+Jvp = Jv' * inv(Jv * Jv');
+% Calculate qd from using Jacobian
+qd = Jvp * pd;
