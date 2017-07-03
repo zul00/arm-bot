@@ -1,7 +1,7 @@
 function qd = calculate_qd(q, setpoint, L)
 
 % Control parameter
-Kv = 10;
+Kv = 20;
 
 %% Get Brocket and Jacobian
 % Brocket
@@ -19,7 +19,7 @@ if norm(pd) > 10
     pd = 10*(pd/norm(pd));
 end
 % Move frame of Jacobian
-AdH04 = adj('z', 0, p_0);
+AdH04 = adj('i', 0, p_0);
 J4 = inv(AdH04) * J;
 % Velocity Jacobian
 Jv = J4(4:6, :);

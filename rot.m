@@ -19,6 +19,8 @@ switch axis
         sin(ang)   cos(ang)    0;
         0          0           1
         ];
+    case 'i'
+        R = eye(3);
     otherwise
         error('Unknown axis')
 end
