@@ -22,13 +22,6 @@ H3_0 = [
     zeros(1,3)  1
 ];
 
-% End Effector
-%Pe   = [0 0 L(1)+L(2)+L(3)]';
-%He_0 = [
-%    eye(3)      Pe;
-%    zeros(1,3)  1
-%];
-
 %% Unit twist
 % Body 1
 w1 = [0  0  1]';
@@ -54,5 +47,4 @@ tT3 = tildeTwist(T3);
 H1 = expm(tT1*q(1)) * H1_0;
 H2 = expm(tT1*q(1)) * expm(tT2*q(2)) * H2_0;
 H3 = expm(tT1*q(1)) * expm(tT2*q(2)) * expm(tT3*q(3)) * H3_0;
-%He = expm(tT1*q(1)) * expm(tT2*q(2)) * expm(tT3*q(3)) * He_0;
 end
