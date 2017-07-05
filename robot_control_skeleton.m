@@ -59,7 +59,11 @@ q_robot_old = [0,0,0];
 qd = [0;0;0];
 
 figure(2);
-figureHandle = animatedline;
+figX = animatedline;
+figure(3);
+figY = animatedline;
+figure(4);
+figZ = animatedline;
 
 tic
 for i=1:N
@@ -111,7 +115,9 @@ for i=1:N
         plot_robot3(x,y,z,H1_0,H2_0,H3_0,rH1_0,rH2_0,rH3_0);
 
         % 2D plot
-        addpoints(figureHandle, t, x);
+        addpoints(figX, t, x);
+        addpoints(figY, t, y);
+        addpoints(figZ, t, z);
         %ax.XLim = [0 N];
         drawnow
     end
