@@ -58,6 +58,9 @@ q_robot_old = [0,0,0];
 
 qd = [0;0;0];
 
+figure(2);
+figureHandle = animatedline;
+
 tic
 for i=1:N
     % while loop to wait for timing
@@ -76,6 +79,7 @@ for i=1:N
     end
     
     % Generate setpoint
+    % DEFAULT SETPOINT
     x = 8*cos(1*t);
     y = -15;
     z = 8+ 6*sin(2*t);
@@ -98,12 +102,18 @@ for i=1:N
         q_robot = [0,0,0];
     end
     
+    % Get simulated and real robot configuration
     [H1_0, H2_0, H3_0] = getHmatrices(q, robot_params);
     [rH1_0, rH2_0, rH3_0] = getHmatrices(q_robot,robot_params);
     
     % Plot the robot
     if plotRobot
         plot_robot3(x,y,z,H1_0,H2_0,H3_0,rH1_0,rH2_0,rH3_0);
+
+        % 2D plot
+        addpoints(figureHandle, t, x);
+        %ax.XLim = [0 N];
+        drawnow
     end
    
 end
