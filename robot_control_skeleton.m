@@ -1,5 +1,6 @@
 %% Settings and parameters
 clear all
+close all
 
 % Is the real robot connected?
 realRobotOutput = false;
@@ -58,12 +59,23 @@ q_robot_old = [0,0,0];
 
 qd = [0;0;0];
 
-figure(2);
-figX = animatedline;
-figure(3);
-figY = animatedline;
-figure(4);
-figZ = animatedline;
+log_Xsp = [];
+log_Ysp = [];
+log_Zsp = [];
+log_Xm = [];
+log_Ym = [];
+log_Zm = [];
+log_t = [];
+
+%figure(2);
+%figX = animatedline;
+%aX = gca;
+%figure(3);
+%figY = animatedline;
+%aY = gca;
+%figure(4);
+%figZ = animatedline;
+%aZ = gca;
 
 tic
 for i=1:N
@@ -110,19 +122,49 @@ for i=1:N
     [H1_0, H2_0, H3_0] = getHmatrices(q, robot_params);
     [rH1_0, rH2_0, rH3_0] = getHmatrices(q_robot,robot_params);
     
+    % Log Data
+    log_Xsp = [log_Xsp x];
+    log_Ysp = [log_Ysp y];
+    log_Zsp = [log_Zsp z];
+    log_Xm = [log_Xm H3_0(1,4)];
+    log_Ym = [log_Ym H3_0(2,4)];
+    log_Zm = [log_Zm H3_0(3,4)];
+    log_t = [log_t t];
     % Plot the robot
     if plotRobot
         plot_robot3(x,y,z,H1_0,H2_0,H3_0,rH1_0,rH2_0,rH3_0);
 
         % 2D plot
-        addpoints(figX, t, x);
-        addpoints(figY, t, y);
-        addpoints(figZ, t, z);
-        %ax.XLim = [0 N];
-        drawnow
+        %addpoints(figX, t, H3_0(1,4)-x);
+        %addpoints(figY, t, H3_0(2,4)-y);
+        %addpoints(figZ, t, H3_0(3,4)-z);
+
+        %aX.XLim = [t-1 t];
+        %aY.XLim = [t-1 t];
+        %aZ.XLim = [t-1 t];
+        %drawnow
     end
    
 end
+
+%[tlog, dXlog] = getpoints(figX);
+
+figure(2)
+hold on
+plot(log_t, log_Xsp)
+plot(log_t, log_Xm)
+hold off
+figure(3)
+hold on
+plot(log_t, log_Ysp)
+plot(log_t, log_Ym)
+hold off
+figure(4)
+hold on
+plot(log_t, log_Zsp)
+plot(log_t, log_Zm)
+hold off
+
 
 %% De-init
 pause(0.5)
