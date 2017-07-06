@@ -65,17 +65,10 @@ log_Zsp = [];
 log_Xm = [];
 log_Ym = [];
 log_Zm = [];
+log_Xr = [];
+log_Yr = [];
+log_Zr = [];
 log_t = [];
-
-%figure(2);
-%figX = animatedline;
-%aX = gca;
-%figure(3);
-%figY = animatedline;
-%aY = gca;
-%figure(4);
-%figZ = animatedline;
-%aZ = gca;
 
 tic
 for i=1:N
@@ -95,13 +88,25 @@ for i=1:N
     end
     
     % Generate setpoint
-    % DEFAULT SETPOINT
-    x = 8*cos(1*t);
-    y = -15;
-    z = 8+ 6*sin(2*t);
+    if i < N/2
+        % DEFAULT SETPOINT
+        x = 8*cos(1*t);
+        y = -15;
+        z = 8+ 6*sin(2*t);
+    else
+        % Horizontal Setpoint
+        x = 6*sin(2*t);
+        z = 2;
+        y = -15+4*cos(1*t);
+    end
+
+    %t = linspace(-pi,pi, 350);
+    %x = t .* sin( pi * sin(t)./t);
+    %y = -abs(t) .* cos( pi * sin(t)./t);
+    %z = 2;
     
     setpoint=[x;y;z];
-    
+    % Init
     % Calculate desired angle speeds
     qd = calculate_qd(q, setpoint, robot_params);
     
@@ -129,42 +134,83 @@ for i=1:N
     log_Xm = [log_Xm H3_0(1,4)];
     log_Ym = [log_Ym H3_0(2,4)];
     log_Zm = [log_Zm H3_0(3,4)];
+    log_Xr = [log_Xr rH3_0(1,4)];
+    log_Yr = [log_Yr rH3_0(2,4)];
+    log_Zr = [log_Zr rH3_0(3,4)];
     log_t = [log_t t];
     % Plot the robot
     if plotRobot
         plot_robot3(x,y,z,H1_0,H2_0,H3_0,rH1_0,rH2_0,rH3_0);
-
-        % 2D plot
-        %addpoints(figX, t, H3_0(1,4)-x);
-        %addpoints(figY, t, H3_0(2,4)-y);
-        %addpoints(figZ, t, H3_0(3,4)-z);
-
-        %aX.XLim = [t-1 t];
-        %aY.XLim = [t-1 t];
-        %aZ.XLim = [t-1 t];
-        %drawnow
     end
    
 end
 
 %[tlog, dXlog] = getpoints(figX);
 
-figure(2)
-hold on
-plot(log_t, log_Xsp)
-plot(log_t, log_Xm)
-hold off
-figure(3)
-hold on
-plot(log_t, log_Ysp)
-plot(log_t, log_Ym)
-hold off
-figure(4)
-hold on
-plot(log_t, log_Zsp)
-plot(log_t, log_Zm)
-hold off
+%% Plot log
 
+figure(2)
+subplot(2,1,1)
+    title('X Position');
+    hold on
+    plot(log_t, log_Xsp, 'Linewidth', 1.5)
+    plot(log_t, log_Xm, 'Linewidth', 1.5)
+    plot(log_t, log_Xr, 'Linewidth', 1.5)
+    hold off
+    xlabel('t');
+    ylabel('cm');
+    legend('set point', 'model', 'robot')
+subplot(2,1,2)
+    title('X Error');
+    hold on
+    plot(log_t, log_Xsp-log_Xm, 'Linewidth', 1.5)
+    plot(log_t, log_Xsp-log_Xr, 'Linewidth', 1.5)
+    hold off
+    xlabel('t');
+    ylabel('cm');
+    legend('model error', 'robot error')
+
+figure(3)
+subplot(2,1,1)
+    title('Y Position');
+    hold on
+    plot(log_t, log_Ysp, 'Linewidth', 1.5)
+    plot(log_t, log_Ym, 'Linewidth', 1.5)
+    plot(log_t, log_Yr, 'Linewidth', 1.5)
+    hold off
+    xlabel('t');
+    ylabel('cm');
+    legend('set point', 'model', 'robot')
+subplot(2,1,2)
+    title('Y Error');
+    hold on
+    plot(log_t, log_Ysp-log_Ym, 'Linewidth', 1.5)
+    plot(log_t, log_Ysp-log_Yr, 'Linewidth', 1.5)
+    hold off
+    xlabel('t');
+    ylabel('cm');
+    legend('model error', 'robot error')
+
+figure(4)
+subplot(2,1,1)
+    title('Z Position');
+    hold on
+    plot(log_t, log_Zsp, 'Linewidth', 1.5)
+    plot(log_t, log_Zm, 'Linewidth', 1.5)
+    plot(log_t, log_Zr, 'Linewidth', 1.5)
+    hold off
+    xlabel('t');
+    ylabel('cm');
+    legend('set point', 'model', 'robot')
+subplot(2,1,2)
+    title('Z Error');
+    hold on
+    plot(log_t, log_Zsp-log_Zm, 'Linewidth', 1.5)
+    plot(log_t, log_Zsp-log_Zr, 'Linewidth', 1.5)
+    hold off
+    xlabel('t');
+    ylabel('cm');
+    legend('model error', 'robot error')
 
 %% De-init
 pause(0.5)
